@@ -2,8 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/tasks_list.dart';
 import '../screens/add_task_screen.dart';
+import '../models/task.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  List<Task> tasks = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,13 +19,18 @@ class TasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.lightBlueAccent,
-        onPressed: () {
-          showModalBottomSheet(
+        onPressed: () async {
+          String newTask = await showModalBottomSheet(
             context: context,
             builder: (context) {
               return AddTaskScreen();
             },
           );
+          if (newTask != null && newTask != '') {
+            setState(() {
+              tasks.add(Task(name: newTask));
+            });
+          }
         },
       ),
       body: Column(
@@ -50,7 +63,7 @@ class TasksScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '12 Tasks',
+                  '${tasks.length} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
@@ -69,7 +82,7 @@ class TasksScreen extends StatelessWidget {
                   topRight: Radius.circular(20.0),
                 ),
               ),
-              child: TasksList(),
+              child: TasksList(tasks: tasks,),
             ),
           ),
         ],
