@@ -22,7 +22,7 @@ class TaskTile extends StatelessWidget {
         value: isChecked,
         onChanged: checkboxCallback,
       ),
-      onLongPress: deleteTaskCallback,
+      onLongPress: longPressCallback,
     );
   }
 }
